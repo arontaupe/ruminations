@@ -1,0 +1,14 @@
+version: '3.7'
+
+services:
+  ruminations:
+    build: ./
+    image: arontaupe/ruminations
+    restart: unless-stopped
+
+    environment:
+      - USER=user
+      - PASS=pass
+
+    ports:
+      - "5003:5000"
