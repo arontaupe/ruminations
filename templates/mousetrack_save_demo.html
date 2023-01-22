@@ -1,0 +1,62 @@
+<html lang="en">
+
+
+<body>
+
+<input type="text" id="cursorX" size="3"> X-pos
+<br /><br />
+<input type="text" id="cursorY" size="3"> Y-pos
+
+<iframe src="Amazon.com.html"
+        style="border:none; pointer-events: none;"
+        width=100%
+        height=100%
+        title="amazon">
+</iframe>
+
+</body>
+
+<script type="text/javascript">
+
+window.onload = init;
+function init() {
+	if (window.Event) {
+	document.captureEvents(Event.MOUSEMOVE);
+	}
+	document.onmousemove = getCursorXY;
+}
+
+let coords = [];
+
+function getCursorXY(e) {
+    let xpos = (window.Event) ? e.pageX : event.clientX + (document.documentElement.scrollLeft ? document.documentElement.scrollLeft : document.body.scrollLeft);
+    let ypos = (window.Event) ? e.pageY : event.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop);
+	document.getElementById('cursorX').value = xpos;
+	document.getElementById('cursorY').value = ypos;
+    coords.push([xpos, ypos]);
+    //console.log(coords);
+}
+
+function download_csv() {
+    if (coords.length > 100) {
+        console.table(coords);
+        let csv = 'xpos,ypos\n';
+        coords.forEach(function(row) {
+            csv += row.join(',');
+            csv += "\n";
+        });
+        console.log(csv);
+        let hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'coords.csv';
+        hiddenElement.click();
+        coords.length = 0;
+    }
+}
+
+setInterval(download_csv, 2000);
+
+
+</script>
+</html>

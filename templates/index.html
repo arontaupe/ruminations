@@ -1,12 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>FlaskApp</title>
-</head>
-<body>
+{% extends 'bootstrap/base.html' %}
+
+{% block styles %}
+{{ super() }}
+	<style>
+		body { background: #e8f1f9; }
+	</style>
+{% endblock %}
+
+{% block title %}
+Ruminations Index
+{% endblock %}
+
+{% block content %}
     <h1>Hello World!</h1><br/>
     <h2>This is the running first instance of the 2022 Ruminations Project.</h2><br/>
 
-</body>
-</html>
+    <button onclick="window.location.href='/onboard';">
+      Click Here to onboard and become one.
+    </button>
+
+    <button onclick="window.location.href='/show';">
+      Click Here to see all participating Users
+    </button>
+
+    <button onclick="window.location.href='/mousetrack';">
+      Click Here to see a demo of mousetracking at work
+    </button>
+
+    <button onclick="window.location.href='/mousesave';">
+      Click Here to see a demo of mousetracking at work with a csv
+    </button>
+
+{% endblock %}

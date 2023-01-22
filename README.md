@@ -23,6 +23,9 @@ or whatever port was defined in the environment variables
 
 in order to change any design element, please change the .html code in the templates directory.
 
+for a quick online demo:
+use ngrok,
+detailed description following.
 
 enjoy privacy. 
 embrace insanity.
