@@ -2,14 +2,26 @@ import scrapy
 from urllib.parse import urlencode, urljoin
 import re
 import json
+import random
 
-queries = ['tshirt for men', 'tshirt for women']
+
+dtd = ['gauzy', 'meshed', 'cracked', 'stratified', 'scaly', 'swirly', 'perforated', 'pleated', 'flecked', 'fibrous', 'polka-dotted', 'chequered', 'blotchy', 'stained', 'crystalline', 'porous', 'banded', 'lacelike', 'sprinkled', 'bubbly', 'lined', 'veined', 'bumpy', 'paisley', 'potholed', 'waffled', 'pitted', 'frilly', 'spiralled', 'knitted', 'grooved', 'dotted', 'interlaced', 'crosshatched', 'wrinkled', 'smeared', 'striped', 'braided', 'freckled', 'cobwebbed', 'honeycombed', 'woven', 'matted', 'zigzagged', 'marbled', 'studded', 'grid']
+addon = ['gadget', 'toy', 'gift', 'harness', 'inflatable', 'game', 'animal', 'costume']
+
+queries = []
+query = ''
+for adj in dtd:
+    query = adj + ' ' + random.choice(addon)
+    queries.append(query)
+print(queries)
 
 
 class AmazonSpider(scrapy.Spider):
     name = 'amazon'
     allowed_domains = ['amazon.com']
     start_urls = ['http://amazon.com/']
+
+    custom_settings = {'CLOSESPIDER_ITEMCOUNT': 5}
 
     def start_requests(self):
         for query in queries:
