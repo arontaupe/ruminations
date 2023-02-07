@@ -1,10 +1,6 @@
-from flask import Flask, render_template, redirect, url_for, request, \
-    flash  # makes a flask app and serves it to a specified port
+from flask import Flask, render_template, request, flash  # makes a flask app and serves it to a specified port
 import os  # can grab environment variables
-import threading  # enables multithread behaviour
-import time  # accurately measures time differences
 from datetime import datetime  # handles dates
-import json  # make me interact with json
 from flask_httpauth import HTTPBasicAuth
 from flask_sqlalchemy import SQLAlchemy
 # protects the rest api from being publicly available
@@ -14,7 +10,6 @@ from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 from wtforms.validators import DataRequired, InputRequired, Length, Regexp, NumberRange
 from wtforms import SubmitField, SelectField, RadioField, HiddenField, StringField, IntegerField, FloatField
-from datetime import date
 
 # initialize the flask app
 app = Flask(__name__)
@@ -37,14 +32,14 @@ db = SQLAlchemy(app)
 user = os.environ.get('USER')
 pw = os.environ.get('PASS')
 # hash the password
-users = {user: generate_password_hash(pw)}
+webUsers = {user: generate_password_hash(pw)}
 auth = HTTPBasicAuth()
 
 
 # each table in the database needs a class to be created
 # db.Model is required - don't change it
 # identify all columns by name and data type
-class users(db.Model):
+class Users(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String)
@@ -103,8 +98,8 @@ Checks if http user is in user list and checks for correctness of password
     :param password:
     :return: boolean verified or not
     """
-    if username in users:
-        return check_password_hash(users.get(username), password)
+    if username in webUsers:
+        return check_password_hash(webUsers.get(username), password)
     return False
 
 
@@ -125,7 +120,7 @@ def index():
 
 @app.route('/show')
 def show():
-    return render_template('show.html', users=users.query.all())
+    return render_template('show.html', users=Users.query.all())
 
 
 @app.route('/mousetrack')
@@ -140,7 +135,6 @@ def mousesave():
 def onboard():
     # you must tell the variable 'form' what you named the class, above
     form = AddUser()
-    message = ""
 
     if form.validate_on_submit():
         firstname = request.form['firstname']
@@ -153,7 +147,7 @@ def onboard():
         updated = now.strftime(format_str)
 
         # the data to be inserted
-        record = users(firstname, lastname, iban, updated)
+        record = Users(firstname, lastname, iban, updated)
         # Flask-SQLAlchemy magic adds record to database
         db.session.add(record)
         db.session.commit()
