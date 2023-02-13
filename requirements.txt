@@ -12,3 +12,5 @@ beautifulsoup4~=4.11.1
 Scrapy==2.8.0
 itemadapter~=0.7.0
 pandas~=1.5.3
+scrapy-user-agents
+scrapy

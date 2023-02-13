@@ -32,7 +32,7 @@ class AmazonSpider(scrapy.Spider):
 	allowed_domains = ['amazon.com', 'amazon.de']
 	start_urls = ['http://amazon.com/', 'https://amazon.com/']
 
-	#custom_settings = {'CLOSESPIDER_ITEMCOUNT': 6}
+	#custom_settings = {'CLOSESPIDER_ITEMCOUNT': 8}
 
 	def start_requests(self):
 		#queries.to_csv('queries.csv')
@@ -82,11 +82,17 @@ class AmazonSpider(scrapy.Spider):
 		seller_rank = response.xpath(
 				'//*[text()="Amazon Best Sellers Rank:"]/parent::*//text()[not(parent::style)]'
 		).extract()
-		yield {'asin'           : asin, 'Title': title, 'MainImage': image, 'Rating': rating,
+		yield {'asin'           : asin,
+		       'Title': title,
+		       'MainImage': image,
+		       'Rating': rating,
 		       'NumberOfReviews': number_of_reviews,
-		       'Price'          : price, 'AvailableSizes': sizes, 'AvailableColors': colors,
+		       'Price'          : price,
+		       'AvailableSizes': sizes,
+		       'AvailableColors': colors,
 		       'BulletPoints'   : bullet_points,
-		       'SellerRank'     : seller_rank}
+		       'SellerRank'     : seller_rank,
+		       'Query': query}
 
 	def parse(self, response):
 		pass
