@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Ruminations",
+  "version": "0.1",
+  "description": "Detects HTTP Requests and makes noise",
+
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": [
+        "https://developer.chrome.com/docs/extensions/*",
+        "https://developer.chrome.com/docs/webstore/*",
+        "https://amazon.com/*",
+        "https://amazon.de/*"
+      ]
+    }
+  ],
+  "icons": {"2048": "ruminations_logo.png" },
+  "permissions": ["background", "tabs", "webRequest",
+    "*://*.google.com/"]
+}
