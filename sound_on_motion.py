@@ -7,8 +7,9 @@ import numpy as np
 import pyaudio
 
 show_debug = False
-sensitivity = 10000 # motion sensitivity. higher is less sensitive. default: 10000
-deepfactor = 2
+contoursize = 15000 # motion sensitivity. higher is less sensitive. default: 10000
+sensitivity = 50 # binary threshold. higher is less sensitive. default: 30
+deepfactor = 10
 
 # Assigning our initial state in the form of variable initialState as None for initial frames
 initialState = None
@@ -23,8 +24,8 @@ video = cv2.VideoCapture(0)
 start_time = time.time()
 ref_time = time.time()
 
-interval = 1.0
-blursize = 51
+interval = 2.0
+blursize = 57
 
 def get_average(img):
 	average_color_row = np.average(img, axis=0)
@@ -33,10 +34,10 @@ def get_average(img):
 
 def play_sound(brightness, deepfactor):
 	p = pyaudio.PyAudio()
-	volume = 1.0  # range [0.0, 1.0]
+	volume = 0.5  # range [0.0, 1.0]
 	fs = 44100  # sampling rate, Hz, must be integer
-	duration = 0.05  # in seconds, may be float
-	f = brightness /deepfactor # sine frequency, Hz, may be float
+	duration = 0.1  # in seconds, may be float
+	f = brightness / deepfactor # sine frequency, Hz, may be float
 
 	# generate samples, note conversion to float32 array
 	samples = (np.sin(2 * np.pi * np.arange(fs * duration) * f / fs)).astype(np.float32)
@@ -49,7 +50,6 @@ def play_sound(brightness, deepfactor):
 	                rate=fs,
 	                output=True
 	                )
-
 	# play. May repeat with different volume values (if done interactively)
 	start_time = time.time()
 	stream.write(output_bytes)
@@ -85,7 +85,7 @@ while True:
 	# Calculation of difference between static or initial and gray frame we created
 	differ_frame = cv2.absdiff(initialState, gray_frame)
 	# the change between static or initial background and current gray frame are highlighted
-	thresh_frame = cv2.threshold(differ_frame, 30, 255, cv2.THRESH_BINARY)[1]
+	thresh_frame = cv2.threshold(differ_frame, sensitivity, 255, cv2.THRESH_BINARY)[1]
 	thresh_frame = cv2.dilate(thresh_frame, None, iterations=2)
 	# For the moving object in the frame finding the coutours
 	cont, _ = cv2.findContours(thresh_frame.copy(),
@@ -93,10 +93,12 @@ while True:
 	                           )
 
 	for cur in cont:
-		if cv2.contourArea(cur) < sensitivity:
+		if cv2.contourArea(cur) < contoursize:
 			continue
 		var_motion = 1
+
 		play_sound(cv2.contourArea(cur), deepfactor)
+
 		(cur_x, cur_y, cur_w, cur_h) = cv2.boundingRect(cur)
 		# To create a rectangle of green color around the moving object
 		cv2.rectangle(cur_frame, (cur_x, cur_y), (cur_x + cur_w, cur_y + cur_h), (0, 255, 0), 3)

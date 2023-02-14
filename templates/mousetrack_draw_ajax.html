@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.jsdelivr.net/npm/p5@1.5.0/lib/p5.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <title>
         Draw with the mouse in a HTML5 canvas
     </title>
@@ -37,7 +38,7 @@
         title="amazon">
     </iframe>
 
-    <script src="index.js"></script>
+
 </body>
 
 <script>
@@ -103,8 +104,24 @@
       paint = false;
       // Write the image to file
       let dataURL = canvas.toDataURL();
-      const blob = await fetch(dataURL).then(it => it.blob())
-      saveBlob(blob, 'test.png')
+ dataURL = dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
+console.log(dataURL)
+
+
+      let hook_url = "http://127.0.0.1:5002/hook"
+
+    let data = new FormData();
+    data.append("data",dataURL);
+
+    // send data to the server and fetch back response
+    fetch(hook_url, {
+    method: "POST",
+    body: data
+    }).then(response => response.text)
+    .then(text => data.value = text);
+
+        const blob = await fetch(dataURL).then(it => it.blob())
+      saveBlob(blob, 'test.png');
 
     }
 function saveBlob(blob, fileName) {
@@ -117,8 +134,7 @@ function saveBlob(blob, fileName) {
     a.download = fileName;
     a.click();
     window.URL.revokeObjectURL(url);}
-
-    function sketch(event){
+  function sketch(event){
     if (!paint) return;
     ctx.beginPath();
 
