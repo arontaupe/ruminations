@@ -63,10 +63,16 @@ class Boid {
     let coh = this.cohesion(boids); // Cohesion
 	let lis = this.listeriosis(boids); // Direction
     // Arbitrarily weight these forces
-    sep.mult(0.6);
     ali.mult(0.2);
     coh.mult(0.1);
-	lis.mult(0.6);
+	
+	if (mouseIsPressed === true) {
+		lis.mult(10.0);
+		sep.mult(10.0);
+	} else {
+		lis.mult(0.3);
+		sep.mult(0.6);
+	}
 	
 	
     // Add the force vectors to acceleration
@@ -165,6 +171,7 @@ class Boid {
   
   // Direct
   listeriosis(boids) {
+	  
 	let listeriosisTarget = createVector(mouseX, mouseY);
 	let steer = p5.Vector.sub(listeriosisTarget, this.position);
 	try {
@@ -172,7 +179,7 @@ class Boid {
 		steer.limit(this.maxforce);
 		return steer;
 	} catch (error) {
-		return createVector(0,0)
+		return createVector(0,0);
 	}
 	
   }
