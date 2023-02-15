@@ -134,14 +134,13 @@ from structure_classifier_python import classifier
 @app.route('/hook', methods=['POST'])
 def save_canvas():
 	if request.method == "POST":
-		print("request received")
 		data = request.form["data"]
 		data = base64.b64decode((data))
 		data_png = open('structure_classifier_python/image.png', 'wb')  # create a writable image and write the decoding result
 		data_png.write(data)
 		result = classifier.classify()
 		print(result)
-		return result
+		return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 
 @app.route('/show')

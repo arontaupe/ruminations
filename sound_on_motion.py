@@ -2,14 +2,13 @@ import pandas as pd
 import cv2
 import time
 from datetime import datetime
-import threading
 import numpy as np
 import pyaudio
 
 show_debug = False
-contoursize = 15000 # motion sensitivity. higher is less sensitive. default: 10000
+contoursize = 5000 # motion sensitivity. higher is less sensitive. default: 10000
 sensitivity = 50 # binary threshold. higher is less sensitive. default: 30
-deepfactor = 10
+deepfactor = 15
 
 # Assigning our initial state in the form of variable initialState as None for initial frames
 initialState = None
@@ -24,8 +23,8 @@ video = cv2.VideoCapture(0)
 start_time = time.time()
 ref_time = time.time()
 
-interval = 2.0
-blursize = 57
+interval = 3.0
+blursize = 21
 
 def get_average(img):
 	average_color_row = np.average(img, axis=0)
@@ -36,7 +35,7 @@ def play_sound(brightness, deepfactor):
 	p = pyaudio.PyAudio()
 	volume = 0.5  # range [0.0, 1.0]
 	fs = 44100  # sampling rate, Hz, must be integer
-	duration = 0.1  # in seconds, may be float
+	duration = 0.2  # in seconds, may be float
 	f = brightness / deepfactor # sine frequency, Hz, may be float
 
 	# generate samples, note conversion to float32 array
@@ -91,7 +90,6 @@ while True:
 	cont, _ = cv2.findContours(thresh_frame.copy(),
 	                           cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE
 	                           )
-
 	for cur in cont:
 		if cv2.contourArea(cur) < contoursize:
 			continue
@@ -101,7 +99,7 @@ while True:
 
 		(cur_x, cur_y, cur_w, cur_h) = cv2.boundingRect(cur)
 		# To create a rectangle of green color around the moving object
-		cv2.rectangle(cur_frame, (cur_x, cur_y), (cur_x + cur_w, cur_y + cur_h), (0, 255, 0), 3)
+		cv2.rectangle(differ_frame, (cur_x, cur_y), (cur_x + cur_w, cur_y + cur_h), (255), 1)
 
 	# from the frame adding the motion status
 	motionTrackList.append(var_motion)
