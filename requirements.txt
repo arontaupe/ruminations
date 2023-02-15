@@ -14,7 +14,8 @@ itemadapter~=0.7.0
 pandas~=1.5.3
 scrapy-user-agents
 scrapy
-
+flask-cors
+tensorflow
 
 opencv-python
 pillow

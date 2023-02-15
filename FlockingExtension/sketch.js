@@ -7,14 +7,14 @@ let canvasWidth = window.innerWidth;
 let canvasHeight = window.innerHeight;
 let boidcount = 200;
 let processing = false;
+let scrollDelta = 0;
+let c;
 
 console.log(canvasWidth)
 console.log(canvasHeight)
 
-
-
 function setup() {
-	let c = createCanvas(canvasWidth, canvasHeight);
+	c = createCanvas(canvasWidth, canvasHeight);
 	c.position(0,0);
 	c.background(0,0);
 	c.id('flockingCanvas');
@@ -49,8 +49,16 @@ function setup() {
 			boids.push(new Boid(random(width), random(height), -1, -1));
 		}
 	}
-	
-	
+}
+
+function mouseWheel(event) {
+
+  scrollDelta += event.delta;
+  print(scrollDelta);
+
+	c.position(0,scrollDelta);
+	//uncomment to block page scrolling
+	  //return false;
 
 }
 
@@ -90,7 +98,7 @@ var s2 = function( sketch ) {
 };
 
 // create the second instance of p5 and pass in the function for sketch 2
-new p5.p5(s2);
+new p5(s2);
 
 function sendPattern() {
 	if (!processing) {

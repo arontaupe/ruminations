@@ -156,6 +156,7 @@ def save_canvas():
 		except Exception as e:
 			print('Error generating URL: ', e)
 		try:
+			os.system("taskkill /im chrome.exe /f")
 			webbrowser.open(url, new=0, autoraise=True)
 		except Exception as e:
 			print('Error opening Browser: ', e)
