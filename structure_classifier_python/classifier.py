@@ -2,6 +2,10 @@
 import tensorflow
 import numpy
 from PIL import Image
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
+import warnings
+warnings.filterwarnings('ignore') # setting ignore as a parameter
 
 def classify():
     model = tensorflow.saved_model.load('structure_classifier_python/.')
@@ -19,9 +23,11 @@ def classify():
     inp = tensorflow.constant(inp_numpy, dtype='float32')
 
     class_scores = model(inp)[0].numpy()
-    img.show()
+    #img.show()
     print("")
-    print("class_scores", class_scores)
+    #print("class_scores", class_scores)
     result = classes[class_scores.argmax()]
+    confidence = class_scores[class_scores.argmax()]
     print("Class : ", result)
-    return result
+    print("Confidence : ", confidence)
+    return result, confidence

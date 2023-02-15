@@ -13,14 +13,8 @@ def gen_url(attribute):
         url = base_url + static + asin
         html = requests.get(url)
         if html.status_code != 404:
-            print(url, end=' ')
+            #print(url, end=' ')
             urllist.append(url)
-        else:
-            print("-", end='')
-    print("")
-    print(urllist)
+    #print("")
+    #print(urllist)
     return urllist
-
-
-
-gen_url('polka-dotted')

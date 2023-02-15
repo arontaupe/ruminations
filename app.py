@@ -1,3 +1,5 @@
+import random
+
 from flask import Flask, render_template, request, flash, jsonify  # makes a flask app and serves it to a specified port
 import os  # can grab environment variables
 from datetime import datetime  # handles dates
@@ -131,6 +133,11 @@ def index():
 	return render_template('index.html')
 
 from structure_classifier_python import classifier
+from url_generator import gen_url
+
+import webbrowser
+
+
 @app.route('/hook', methods=['POST'])
 def save_canvas():
 	if request.method == "POST":
@@ -138,8 +145,21 @@ def save_canvas():
 		data = base64.b64decode((data))
 		data_png = open('structure_classifier_python/image.png', 'wb')  # create a writable image and write the decoding result
 		data_png.write(data)
-		result = classifier.classify()
+		result, confidence = classifier.classify()
 		print(result)
+		try:
+			urllist = gen_url(result)
+			print()
+			url = random.choice(urllist)
+			print(url)
+
+		except Exception as e:
+			print('Error generating URL: ', e)
+		try:
+			webbrowser.open(url, new=0, autoraise=True)
+		except Exception as e:
+			print('Error opening Browser: ', e)
+
 		return json.dumps({'success':True}), 200, {'ContentType':'application/json'}
 
 
