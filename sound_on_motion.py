@@ -6,7 +6,7 @@ import numpy as np
 import pyaudio
 
 show_debug = False
-contoursize = 5000 # motion sensitivity. higher is less sensitive. default: 10000
+contoursize = 12000 # motion sensitivity. higher is less sensitive. default: 10000
 sensitivity = 50 # binary threshold. higher is less sensitive. default: 30
 deepfactor = 15
 

@@ -1,13 +1,23 @@
 {
   "manifest_version": 3,
 
-  "name": "TestRuminations",
+  "name": "Ruminations",
   "description": "",
   "version": "1.0",
   "content_scripts":[
     {
-      "matches": ["<all_urls>"],
+      "matches": [
+        //"<all_urls>",
+        //"https://www.google.com/*",
+        "https://www.amazon.com/*",
+        "http://www.amazon.com/*",
+        "https://www.amazon.de/*",
+        "http://www.amazon.de/*"
+      ],
       "js": ["sketch.js", "p5.js", "Boid.js"]
     }
-  ]
+  ],
+  "icons": {"2048": "ruminations_logo.png" },
+    "permissions": ["background", "tabs", "webRequest"
+    ]
 }
