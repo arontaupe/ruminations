@@ -106254,6 +106254,9 @@ let canvasHeight = window.innerHeight;
 let boidcount = 200;
 let processing = false;
 
+let hiddenCanvas;
+let flockingCanvas;
+
 console.log(canvasWidth)
 console.log(canvasHeight)
 
@@ -106267,7 +106270,9 @@ function setup() {
 	
 	
 	//document.getElementById("flockingCanvas").style.display = 'none';
-	document.getElementById("flockingCanvas").style.pointerEvents = 'none';
+	flockingCanvas = document.getElementById("flockingCanvas")
+	flockingCanvas.style.pointerEvents = 'none';
+	flockingCanvas.style.position = 'fixed';
 	
 	// Add an initial set of boids into the system
 	for (let i = 0; i<boidcount; i++) {
@@ -106293,7 +106298,9 @@ var s2 = function( sketch ) {
 		canvas2.id('hiddenCanvas');
 		
 		//window.addEventListener('resize', resizeAllCanvas);
-		document.getElementById('hiddenCanvas').style.display = 'none';
+		hiddenCanvas = document.getElementById("hiddenCanvas")
+		hiddenCanvas.style.display = 'none';
+		hiddenCanvas.style.position = 'fixed';
 		
 	}
 	
@@ -106337,19 +106344,4 @@ function sendPattern() {
 		processing = false;
 	}
 }
-
-function resizeAllCanvas(){
-	
-	const hiddenCanvas = document.getElementById("hiddenCanvas");
-	const hiddenCTX = hiddenCanvas.getContext('2d');
-	
-	const flockingCanvas = document.getElementById('flockingCanvas');
-	const flockingCTX = flockingCanvas.getContext('2d');
-
-    flockingCTX.canvas.width = window.innerWidth;
-    flockingCTX.canvas.height = window.innerHeight;
-	
-	hiddenCTX.canvas.width = window.innerWidth;
-    hiddenCTX.canvas.height = window.innerHeight;
-	}
 
