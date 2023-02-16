@@ -108,7 +108,7 @@ class Boid {
   
   
   randomText() {
-	return (Math.random() + 1).toString(36).substring(int(Math.random() * this.textMaxLength));
+	return random([random(ASINs), random(random(Descriptions).split(" "))]);
   }
   
   randomColor() {

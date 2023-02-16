@@ -7,17 +7,18 @@
   "content_scripts":[
     {
       "matches": [
-        //"<all_urls>",
+        "<all_urls>",
         //"https://www.google.com/*",
         "https://www.amazon.com/*",
         "http://www.amazon.com/*",
+		"http://www.amazon.com/dp/*",
+		"http://www.amazon.de/dp/*",
         "https://www.amazon.de/*",
         "http://www.amazon.de/*"
       ],
-      "js": ["sketch.js", "p5.js", "Boid.js"]
+      "js": ["Boid.js", "csvTest.js", "ALL.js"]
     }
   ],
-  "icons": {"2048": "ruminations_logo.png" },
-    "permissions": ["background", "tabs", "webRequest"
-    ]
+	"icons": {"2048": "ruminations_logo.png" },
+		"permissions": ["background", "tabs", "webRequest", "scripting"]	
 }
