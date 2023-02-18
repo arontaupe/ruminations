@@ -106251,7 +106251,7 @@ console.log('loaded');
 let boids = [];
 let canvasWidth = window.innerWidth;
 let canvasHeight = window.innerHeight;
-let boidcount = 200;
+let boidcount = 120;
 let processing = false;
 
 let hiddenCanvas;
@@ -106260,15 +106260,12 @@ let flockingCanvas;
 console.log(canvasWidth)
 console.log(canvasHeight)
 
-
-
 function setup() {
 	let c = createCanvas(window.innerWidth, window.innerHeight);
 	c.position(0,0);
 	c.background(0,0);
 	c.id('flockingCanvas');
-	
-	
+
 	//document.getElementById("flockingCanvas").style.display = 'none';
 	flockingCanvas = document.getElementById("flockingCanvas")
 	flockingCanvas.style.pointerEvents = 'none';
@@ -106286,8 +106283,10 @@ function draw() {
   for (let i = 0; i < boids.length; i++) {
 	boids[i].run(boids);
   }
-  
-  
+}
+
+function randomColor() {
+    return color(random(255), random(255), random(255));
 }
 
 var s2 = function( sketch ) {
@@ -106299,7 +106298,7 @@ var s2 = function( sketch ) {
 		
 		//window.addEventListener('resize', resizeAllCanvas);
 		hiddenCanvas = document.getElementById("hiddenCanvas")
-		hiddenCanvas.style.display = 'none';
+		hiddenCanvas.style.pointerEvents = 'none';
 		hiddenCanvas.style.position = 'fixed';
 		
 	}
@@ -106307,14 +106306,30 @@ var s2 = function( sketch ) {
 	sketch.draw = function() {
 		if (mouseIsPressed === true) {
 			sketch.line(sketch.mouseX, sketch.mouseY, sketch.pmouseX, sketch.pmouseY);
-			sketch.stroke(25);
+			sketch.stroke(randomColor());
+            let d = createVector(sketch.mouseX, sketch.mouseY).dist(createVector(sketch.pmouseX, sketch.pmouseY))
+            sketch.strokeWeight(int(39 / (d / 3)));
 			startedDrawing = true;
 		}
 	}
-	
-	sketch.mouseReleased = function() {
-		sketch.clear();
-		sendPattern();
+    let mousestarttime = 0;
+
+	sketch.mousePressed =  function(ev) {
+       mousestarttime = ev.timeStamp;
+    }
+
+	sketch.mouseReleased = function(ev) {
+        if(ev.timeStamp - mousestarttime > 2000){
+            		sendPattern();
+        sketch.clear();
+        //console.log(ev.timeStamp - mousestarttime);
+        console.log("sent pattern");
+        }
+        else{
+            //console.log(ev.timeStamp - mousestarttime);
+
+            //console.log("not long enough");
+        }
 	}
 };
 
@@ -106326,7 +106341,7 @@ function sendPattern() {
 		patternCanvas = document.getElementById("hiddenCanvas");
 		let dataURL = patternCanvas.toDataURL();
 		dataURL = dataURL.replace(/^data:image\/[a-z]+;base64,/, "");
-		console.log(dataURL)
+		//console.log(dataURL)
 
 		let hook_url = "http://127.0.0.1:5002/hook"
 
@@ -106344,4 +106359,3 @@ function sendPattern() {
 		processing = false;
 	}
 }
-
