@@ -15,8 +15,7 @@ pandas~=1.5.3
 scrapy-user-agents
 scrapy
 flask-cors
-tensorflow
-
+tf-nightly-macos
 opencv-python
 pillow
 imutils
